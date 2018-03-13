@@ -1,5 +1,6 @@
 package com.appsbyahrens.buttonfun;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -41,6 +42,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         int viewID = v.getId();
         if (viewID == second.getId()) {
             Log.d(LOGTAG, "Second Button Clicked");
+            Intent intent = new Intent("android.intent.action.BOOKMARK");
+            startActivity(intent);
         } else {
             Log.e(LOGTAG, "Unknown View Clicked");
         }
@@ -48,6 +51,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     // Third method. Hooks up android:onClick in XML
     public void performThirdButtonAction(View view) {
+        Intent intent = new Intent(MainActivity.this, BookmarkActivity.class);
+        startActivity(intent);
         Log.d(LOGTAG, "Third Button Clicked");
     }
 }

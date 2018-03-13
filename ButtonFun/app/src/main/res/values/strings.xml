@@ -3,4 +3,5 @@
     <string name="first_button">First Click Me!</string>
     <string name="second_button">Second Click Me!</string>
     <string name="third_button">Third Click Me!</string>
+    <string name="title_activity_bookmark">BookmarkActivity</string>
 </resources>

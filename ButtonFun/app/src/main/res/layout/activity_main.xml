@@ -20,23 +20,26 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
         <Button
+            android:id="@+id/first_button"
+            android:text="@string/first_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/first_button"
-            android:text="@string/first_button"/>
+            />
 
         <Button
             android:id="@+id/second_button"
+            android:text="@string/second_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/second_button" />
+             />
 
         <Button
             android:id="@+id/third_button"
+            android:text="@string/third_button"
+            android:onClick="performThirdButtonAction"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="performThirdButtonAction"
-            android:text="@string/third_button" />
+             />
     </LinearLayout>
 
 
