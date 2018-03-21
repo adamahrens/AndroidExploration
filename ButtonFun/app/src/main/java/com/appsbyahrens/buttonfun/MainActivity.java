@@ -4,14 +4,19 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String LOGTAG = MainActivity.class.getSimpleName();
     private Button first;
     private Button second;
+    private Button fourth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Find the buttons
         first = findViewById(R.id.first_button);
         second = findViewById(R.id.second_button);
+        fourth = findViewById(R.id.fourth_button);
 
         // First Method
         second.setOnClickListener(this);
@@ -32,6 +38,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onClick(View v) {
                 Log.d(LOGTAG, "First was clicked but different way!!!!!");
+
+                // Call this as opposed to MainActivity.this
+//                getApplicationContext()
+                Toast toast = Toast.makeText(MainActivity.this, R.string.toast_main_activity_text, Toast.LENGTH_LONG);
+
+                // Positioning Toast
+
+                toast.setGravity(Gravity.TOP, 0, 0);
+//                toast.setGravity(Gravity.CENTER, 0, 0);
+//                toast.setGravity(Gravity.BOTTOM, 0, 0);
+                toast.show();
+            }
+        });
+
+        fourth.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                LayoutInflater inflater = getLayoutInflater();
+                View customToast = inflater.inflate(R.layout.custom_toast, (ViewGroup)findViewById(R.id.custom_toast_root_layout));
+                Toast toast = new Toast(MainActivity.this);
+                toast.setGravity(Gravity.TOP, 0, 0);
+                toast.setDuration(Toast.LENGTH_LONG);
+                toast.setView(customToast);
+                toast.show();
+                Log.d(LOGTAG, "Showing custom Toast");
             }
         });
     }

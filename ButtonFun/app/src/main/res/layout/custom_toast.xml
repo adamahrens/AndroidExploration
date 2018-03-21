@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/custom_toast_root_layout"
+        android:background="@color/colorCustomToastBackground">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="226dp"
+            android:layout_height="101dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_multiple_job_sites"
+            android:contentDescription="Toast Image" />
+
+        <TextView
+            android:id="@+id/customToastTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/toast_main_activity_text"
+            android:layout_gravity="center"
+            android:textColor="@color/colorPrimary"
+            tools:layout_editor_absoluteX="163dp"
+            tools:layout_editor_absoluteY="158dp" />
+    </LinearLayout>
+
+
+</android.support.constraint.ConstraintLayout>
