@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">TimeFighter</string>
+    <string name="tap_me_button_text">Tap Me !</string>
+    <string name="your_score">Your Score: %s</string>
+    <string name="time_left">Time left: %s</string>
+    <string name="game_over_message">Times up! Your score was: %s</string>
+    <string name="current_high_score_text">Current High Score is %s</string>
 </resources>
