@@ -2,6 +2,9 @@ package com.appsbyahrens.mvp;
 
 import android.app.Application;
 
+import com.appsbyahrens.mvp.login.LoginModel;
+import com.appsbyahrens.mvp.login.LoginModule;
+
 import dagger.android.DaggerApplication;
 
 /**
@@ -18,6 +21,7 @@ public class App extends Application {
 
         component = DaggerApplicationComponent.builder()
                 .applicationModule(new ApplicationModule(this))
+                .loginModule(new LoginModule())
                 .build();
     }
 

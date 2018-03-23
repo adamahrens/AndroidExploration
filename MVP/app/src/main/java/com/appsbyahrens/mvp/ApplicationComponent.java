@@ -1,5 +1,7 @@
 package com.appsbyahrens.mvp;
 
+import com.appsbyahrens.mvp.login.Login;
+
 import javax.inject.Singleton;
 
 import dagger.Component;
@@ -9,7 +11,7 @@ import dagger.Component;
  */
 
 @Singleton
-@Component(modules = ApplicationModule.class)
+@Component(modules = {ApplicationModule.class})
 public interface ApplicationComponent {
-    void inject(MainActivity target);
+    void inject(Login target);
 }
