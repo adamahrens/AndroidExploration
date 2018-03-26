@@ -5,7 +5,10 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.preference.PreferenceManager
+import android.support.v7.app.AlertDialog
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Button
@@ -80,10 +83,38 @@ class GameActivity : AppCompatActivity() {
         Log.d(TAG, "onSavedInstanceState called, Score is $currentScore, Time Left is $timeLeft")
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        super.onCreateOptionsMenu(menu)
+        Log.d(TAG, "onCreateOptionsMenu called")
+        menuInflater.inflate(R.menu.menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        super.onOptionsItemSelected(item)
+
+        if (item?.itemId == R.id.action_settings) {
+            Log.d(TAG, "onOptionsItemSelected, selected our menu item")
+            showInfo()
+        }
+
+        return true
+    }
+
     override fun onDestroy() {
         super.onDestroy()
 
         Log.d(TAG, "onDestroy called")
+    }
+
+    private fun showInfo() {
+        val title = getString(R.string.about_title, BuildConfig.VERSION_NAME)
+        val message = getString(R.string.about_message)
+
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle(title)
+        builder.setMessage(message)
+        builder.create().show()
     }
 
     private fun restoreGame() {

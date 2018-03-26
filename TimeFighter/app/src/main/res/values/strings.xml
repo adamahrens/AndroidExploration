@@ -5,4 +5,7 @@
     <string name="time_left">Time left: %s</string>
     <string name="game_over_message">Times up! Your score was: %s</string>
     <string name="current_high_score_text">Current High Score is %s</string>
+    <string name="menu_about">About</string>
+    <string name="about_title">Timefighter %s</string>
+    <string name="about_message">Created by Ahrens</string>
 </resources>
