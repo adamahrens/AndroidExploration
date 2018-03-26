@@ -72,3 +72,11 @@ fastlane/readme.md
 /build
 /captures
 .externalNativeBuild
+ListMaker/.idea
+ListMaker/.idea/workspace.xml
+ListMaker/.idea/tasks.xml
+ListMaker/.idea/gradle.xml
+ListMaker/.idea/dictionaries
+ListMaker/.idea/libraries
+
+/ListMaker/.idea/workspace.xml
