@@ -1,14 +1,13 @@
 package com.appsbyahrens.timefighter
 
-import android.content.ContentValues.TAG
 import android.content.SharedPreferences
-import android.nfc.Tag
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.preference.PreferenceManager
 import android.util.Log
 import android.view.View
+import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
@@ -52,7 +51,11 @@ class GameActivity : AppCompatActivity() {
         tapButton = findViewById<Button>(R.id.tap_me_button)
         currentHighScoreTextView = findViewById<TextView>(R.id.high_score_text_view)
 
-        tapButton.setOnClickListener { view -> incrementScore() }
+        tapButton.setOnClickListener { view ->
+            val animation = AnimationUtils.loadAnimation(this, R.anim.bounce)
+            view.startAnimation(animation)
+            incrementScore()
+        }
 
         val savedScore = savedInstanceState?.getInt(SCORE_KEY)
         val savedTimeLeft = savedInstanceState?.getInt(TIME_LEFT_KEY)
