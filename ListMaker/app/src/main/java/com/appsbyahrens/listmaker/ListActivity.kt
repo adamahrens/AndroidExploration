@@ -15,6 +15,7 @@ class ListActivity : AppCompatActivity(), ListSelectionRecyclerViewAdapter.ListS
 
     companion object {
         val INTENT_LIST_KEY = "IntentToListDetailActivity"
+        val LIST_DETAIL_REQUEST_CODE = 666
     }
 
     lateinit var listsRecyclerView: RecyclerView
@@ -43,8 +44,26 @@ class ListActivity : AppCompatActivity(), ListSelectionRecyclerViewAdapter.ListS
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == LIST_DETAIL_REQUEST_CODE) {
+            data?.let {
+                dataManager.save(it.getParcelableExtra(INTENT_LIST_KEY))
+                updateLists()
+            }
+        }
+    }
+
     override fun listItemClicked(list: TaskList) {
         showListDetailActivity(list)
+    }
+
+    private fun updateLists() {
+        val lists = dataManager.getTaskLists()
+        listsRecyclerView.adapter =
+                ListSelectionRecyclerViewAdapter(lists, this)
+
     }
 
     private fun showAddListDialog() {
@@ -76,6 +95,7 @@ class ListActivity : AppCompatActivity(), ListSelectionRecyclerViewAdapter.ListS
     private fun showListDetailActivity(list: TaskList) {
         val intent = Intent(this, ListDetailActivity::class.java)
         intent.putExtra(INTENT_LIST_KEY, list)
-        startActivity(intent)
+        //startActivity(intent)
+        startActivityForResult(intent, LIST_DETAIL_REQUEST_CODE)
     }
 }
