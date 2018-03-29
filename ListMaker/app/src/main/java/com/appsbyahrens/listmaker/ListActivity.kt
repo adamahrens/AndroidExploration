@@ -1,5 +1,6 @@
 package com.appsbyahrens.listmaker
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
@@ -10,7 +11,11 @@ import android.text.InputType
 import android.util.Log
 import android.widget.EditText
 
-class ListActivity : AppCompatActivity() {
+class ListActivity : AppCompatActivity(), ListSelectionRecyclerViewAdapter.ListSelectionRecyclerViewClickListener {
+
+    companion object {
+        val INTENT_LIST_KEY = "IntentToListDetailActivity"
+    }
 
     lateinit var listsRecyclerView: RecyclerView
     lateinit var addListButton: FloatingActionButton
@@ -30,12 +35,16 @@ class ListActivity : AppCompatActivity() {
         listsRecyclerView.layoutManager = LinearLayoutManager(this)
 
         val lists = dataManager.getTaskLists()
-        listsRecyclerView.adapter = ListSelectionRecyclerViewAdapter(lists)
+        listsRecyclerView.adapter = ListSelectionRecyclerViewAdapter(lists, this)
 
-        addListButton.setOnClickListener { view ->
+        addListButton.setOnClickListener { _ ->
             Log.d(TAG, "onClick")
             showAddListDialog()
         }
+    }
+
+    override fun listItemClicked(list: TaskList) {
+        showListDetailActivity(list)
     }
 
     private fun showAddListDialog() {
@@ -48,9 +57,9 @@ class ListActivity : AppCompatActivity() {
 
         builder.setTitle(title)
         builder.setView(editText)
-        builder.setPositiveButton(buttonTitle, { dialog, i ->
+        builder.setPositiveButton(buttonTitle, { dialog, _ ->
             val listName = editText.text.toString()
-            val list = TaskList(listName, ArrayList<String>())
+            val list = TaskList(listName)
             dataManager.save(list)
 
             val adapter = listsRecyclerView.adapter as ListSelectionRecyclerViewAdapter
@@ -58,8 +67,15 @@ class ListActivity : AppCompatActivity() {
 
             Log.d(TAG, "User entered a list name of $listName")
             dialog.dismiss()
+            showListDetailActivity(list)
         })
 
         builder.create().show()
+    }
+
+    private fun showListDetailActivity(list: TaskList) {
+        val intent = Intent(this, ListDetailActivity::class.java)
+        intent.putExtra(INTENT_LIST_KEY, list)
+        startActivity(intent)
     }
 }

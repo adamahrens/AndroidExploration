@@ -17,9 +17,11 @@ class ListDataManager(val context: AppCompatActivity) {
         val taskLists = ArrayList<TaskList>()
 
         for (taskList in contents) {
-            val hashSet = taskList.value as HashSet<String>
-            val list = TaskList(taskList.key, ArrayList(hashSet))
-            taskLists.add(list)
+            val hashSet = taskList.value as? HashSet<String>
+            hashSet.let { set ->
+                val list = TaskList(taskList.key, ArrayList(set))
+                taskLists.add(list)
+            }
         }
 
         return taskLists
