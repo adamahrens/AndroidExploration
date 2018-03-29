@@ -14,10 +14,9 @@ import android.widget.EditText
 
 class ListDetailActivity : AppCompatActivity() {
 
-    lateinit var taskList: TaskList
-    lateinit var listItemsRecyclerView : RecyclerView
-    lateinit var addTaskButton: FloatingActionButton
-
+    private lateinit var taskList: TaskList
+    private lateinit var listItemsRecyclerView : RecyclerView
+    private lateinit var addTaskButton: FloatingActionButton
     private val TAG = ListDetailActivity::class.java.simpleName
 
     override fun onCreate(savedInstanceState: Bundle?) {
