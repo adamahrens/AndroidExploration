@@ -9,16 +9,24 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+                  android:configChanges="orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!--Forces layout-->
+        <!--android:screenOrientation="portrait"-->
+
+        <!--Notifies the activity instead of destroying and recreating-->
+        <!--android:configChanges="orientation|screenSize|keyboardHidden"-->
         <activity
             android:name=".BookmarkActivity"
             android:label="@string/title_activity_bookmark"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.BOOKMARK" />
                 <category android:name="android.intent.category.DEFAULT" />

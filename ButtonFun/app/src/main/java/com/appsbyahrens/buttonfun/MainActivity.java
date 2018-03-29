@@ -1,6 +1,7 @@
 package com.appsbyahrens.buttonfun;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -65,6 +66,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Log.d(LOGTAG, "Showing custom Toast");
             }
         });
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        int orientation = newConfig.orientation;
+
+        switch (orientation) {
+            case Configuration.ORIENTATION_PORTRAIT : {
+                Log.d(LOGTAG, "Portrait!");
+                Toast.makeText(getApplicationContext(), "In Portrait", Toast.LENGTH_LONG).show();
+                break;
+            }
+            case Configuration.ORIENTATION_LANDSCAPE : {
+                Log.d(LOGTAG, "Landscape!");
+                Toast.makeText(getApplicationContext(), "In Landscape", Toast.LENGTH_LONG).show();
+                break;
+            }
+            default : {
+                Log.d(LOGTAG, "No clue what orientation");
+            }
+        }
     }
 
     @Override
