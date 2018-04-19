@@ -1,9 +1,10 @@
 package com.appsbyahrens.listmaker
 
+import android.content.Context
 import android.preference.PreferenceManager
 import android.support.v7.app.AppCompatActivity
 
-class ListDataManager(val context: AppCompatActivity) {
+class ListDataManager(val context: Context) {
 
     fun save(list: TaskList) {
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context).edit()

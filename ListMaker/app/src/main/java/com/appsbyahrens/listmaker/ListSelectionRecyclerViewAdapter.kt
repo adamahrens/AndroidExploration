@@ -32,7 +32,6 @@ class ListSelectionRecyclerViewAdapter(val taskLists: ArrayList<TaskList>, val c
 
     fun addTaskList(list: TaskList) {
         taskLists.add(list)
-
         notifyDataSetChanged()
     }
 }
