@@ -98,3 +98,15 @@ ListMaker/.idea/libraries
 /Interview/.externalNativeBuild
 /MVP/.idea/caches
 /MVP/.idea/codeStyles
+/PlaceBook/app/src/debug/res/values/google_maps_api.xml
+/PlaceBook/app/src/release/res/values/google_maps_api.xml
+/PlaceBook/*.iml
+/PlaceBook/.gradle
+/PlaceBook/local.properties
+/PlaceBook/.idea/libraries
+/PlaceBook/.idea/modules.xml
+/PlaceBook/.idea/workspace.xml
+/PlaceBook.DS_Store
+/PlaceBook/build
+/PlaceBook/captures
+/PlaceBook/.externalNativeBuild
