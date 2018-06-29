@@ -9,13 +9,22 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
 import android.Manifest
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.util.Log
+import com.appsbyahrens.placebook.adapter.BookmarkInfoWindowAdapter
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.*
+import com.google.android.gms.location.places.Place
+import com.google.android.gms.location.places.PlacePhotoMetadata
+import com.google.android.gms.location.places.Places
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.PointOfInterest
 
-class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
+class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleApiClient.OnConnectionFailedListener {
 
     companion object {
         private const val REQUEST_LOCATION = 1
@@ -24,8 +33,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var googleMap: GoogleMap
     private lateinit var client: FusedLocationProviderClient
-    // Not needed since property on googleMap
-    //private var locationRequest: LocationRequest? = null
+    private lateinit var googleClient: GoogleApiClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +43,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
         setupLocationClient()
+        setupGoogleClient()
     }
 
     /**
@@ -49,13 +58,18 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         this.googleMap = googleMap
 
-        // Add a marker in Sydney and move the camera
-//        val sydney = LatLng(-34.0, 151.0)
-//        this.googleMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-//        this.googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
-
         // Try Finding The Person
         getCurrentLocation()
+
+        // Clicks on Points of Interest
+        //googleMap.setOnPoiClickListener { Toast.makeText(this, it.name, Toast.LENGTH_LONG).show() }
+        googleMap.setOnPoiClickListener { displayPointOfInterest(it) }
+
+        googleMap.setInfoWindowAdapter(BookmarkInfoWindowAdapter(this))
+    }
+
+    override fun onConnectionFailed(connectionResult: ConnectionResult) {
+        Log.e(TAG, "Google connection to Play Services failed: " + connectionResult.errorMessage)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -68,6 +82,70 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             getCurrentLocation()
         } else {
             Log.e(TAG, "Permission Denied")
+        }
+    }
+
+    private fun setupGoogleClient() {
+        googleClient = GoogleApiClient.Builder(this)
+                .enableAutoManage(this, this)
+                .addApi(Places.GEO_DATA_API)
+                .build()
+    }
+
+    private fun displayPointOfInterest(poi: PointOfInterest) {
+        displayPointOfInterestName(poi)
+    }
+
+    private fun displayMarker(place: Place, bitmap: Bitmap?) {
+        Log.e(TAG, "Display marker for ${ place.name }")
+        val marker = googleMap.addMarker(MarkerOptions()
+                .position(place.latLng)
+                .title(place.name as String?)
+                .snippet(place.phoneNumber as String?))
+        marker?.tag = bitmap
+    }
+
+    private fun displayPhoto(place: Place, photo: PlacePhotoMetadata) {
+        val width = resources.getDimensionPixelSize(R.dimen.default_image_width)
+        val height = resources.getDimensionPixelSize(R.dimen.default_image_height)
+        photo.getScaledPhoto(googleClient, width, height).setResultCallback {
+            if (it.status.isSuccess) {
+                val image = it.bitmap
+                displayMarker(place, image)
+            } else {
+                Log.e(TAG, "Error getting scaled Photo")
+            }
+        }
+    }
+
+    private fun displayPhotoOfPlace(place: Place) {
+        Places.GeoDataApi.getPlacePhotos(googleClient, place.id).setResultCallback {
+            if (it.status.isSuccess) {
+                val buffer = it.photoMetadata
+                if (buffer.count > 0) {
+                    val photo = buffer.get(0).freeze()
+                    displayPhoto(place, photo)
+                }
+
+                buffer.release()
+            } else {
+                Log.e(TAG, "Error getting Photo for Point of Interest")
+            }
+        }
+    }
+
+    private fun displayPointOfInterestName(poi: PointOfInterest) {
+        Places.GeoDataApi.getPlaceById(googleClient, poi.placeId).setResultCallback {
+            if (it.status.isSuccess && it.count > 0) {
+                val place = it.get(0).freeze()
+                //Toast.makeText(this, "${place.name} ${place.phoneNumber}", Toast.LENGTH_LONG)
+                //        .show()
+                displayPhotoOfPlace(place)
+            } else {
+                Log.e(TAG, "Error getting Data for Point of Interest")
+            }
+
+            it.release()
         }
     }
 
@@ -87,28 +165,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             requestLocationAccess()
             Log.e(TAG, "Location Services Not Granted Permission")
         } else {
-            /*
-             *
-             *  No longer needed since setting property on googleMap
-            if (locationRequest == null) {
-                locationRequest = LocationRequest.create()
-                locationRequest?.let { request ->
-                    request.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-                    request.interval = 5000
-                    request.fastestInterval = 1000
-
-                    val callback = object: LocationCallback() {
-                        override fun onLocationResult(p0: LocationResult?) {
-                            super.onLocationResult(p0)
-                            Log.e(TAG, "Location has changed!!!")
-                            getCurrentLocation()
-                        }
-                    }
-
-                    client.requestLocationUpdates(locationRequest, callback, null)
-                }
-            }
-            */
 
             // Add blue dot for your location
             googleMap.isMyLocationEnabled = true
@@ -116,14 +172,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             // Already authorized to use location services
             client.lastLocation.addOnCompleteListener {
                 if (it.result != null) {
-                    //googleMap.clear()
-
                     val latLong = LatLng(it.result.latitude, it.result.longitude)
-                    //googleMap.addMarker(MarkerOptions().position(latLong).title("Found You!"))
-
                     val zoomTo = CameraUpdateFactory.newLatLngZoom(latLong, 16.0f)
                     googleMap.moveCamera(zoomTo)
-
                     Log.e(TAG, "Found your location. Zooming in....")
                 } else {
                     Log.e(TAG, "No Location Found!")
