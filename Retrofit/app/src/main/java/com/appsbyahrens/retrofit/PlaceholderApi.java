@@ -18,4 +18,13 @@ public interface PlaceholderApi {
 
   @GET("/todos/{id}")
   Call<ResponseBody> getTodo(@Path("id") int todoId);
+
+  @POST("/posts")
+  Call<ResponseBody> postPost(@Body RequestBody body);
+
+  @GET("/posts")
+  Call<ResponseBody> getPosts(@Query("userId") int userId);
+
+  @GET("/comments")
+  Call<ResponseBody> getComments(@Query("postId") int postId);
 }

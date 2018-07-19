@@ -30,12 +30,68 @@ public class PlaceholderService {
     api.postUser(request).enqueue(new Callback<ResponseBody>() {
       @Override
       public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-        Log.d(LOG_TAG, "Success postUser");
+        Log.d(LOG_TAG, "Success POST User");
       }
 
       @Override
       public void onFailure(Call<ResponseBody> call, Throwable t) {
         Log.e(LOG_TAG, "Error posting User. " + t.getMessage());
+      }
+    });
+  }
+
+  public void affixPost(String post) {
+    RequestBody request = RequestBody.create(MediaType.parse("application/json"), post);
+    api.postPost(request).enqueue(new Callback<ResponseBody>() {
+      @Override
+      public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+        Log.d(LOG_TAG, "Success POST Post");
+      }
+
+      @Override
+      public void onFailure(Call<ResponseBody> call, Throwable t) {
+        Log.e(LOG_TAG, "Error posting POST. " + t.getMessage());
+      }
+    });
+  }
+
+  public void fetchComments(int postId) {
+    api.getComments(postId).enqueue(new Callback<ResponseBody>() {
+      @Override
+      public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+        Log.d(LOG_TAG, "Success GET Comments for Post");
+
+        try {
+          String responseString = response.body().string();
+          Log.d(LOG_TAG, "Comments = " + responseString);
+        } catch (IOException e) {
+          Log.e(LOG_TAG, "Error getting response body string. " + e.getMessage());
+        }
+      }
+
+      @Override
+      public void onFailure(Call<ResponseBody> call, Throwable t) {
+        Log.e(LOG_TAG, "Error fetching Comments for Post. " + t.getMessage());
+      }
+    });
+  }
+  public void fetchPosts(int userId) {
+    api.getPosts(userId).enqueue(new Callback<ResponseBody>() {
+      @Override
+      public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+        Log.d(LOG_TAG, "Success GET Posts for User");
+
+        try {
+          String responseString = response.body().string();
+          Log.d(LOG_TAG, "Posts = " + responseString);
+        } catch (IOException e) {
+          Log.e(LOG_TAG, "Error getting response body string. " + e.getMessage());
+        }
+      }
+
+      @Override
+      public void onFailure(Call<ResponseBody> call, Throwable t) {
+        Log.e(LOG_TAG, "Error fetching Posts for User. " + t.getMessage());
       }
     });
   }

@@ -61,8 +61,18 @@ public class MainActivity extends AppCompatActivity {
     service.fetchTodo(2);
 
     // Create a User
-    String user = "{\"id\":\"101\", \"name\":\"Leroy Jenkins\"}";
+    String user = "{\"id\":101, \"name\":\"Leroy Jenkins\"}";
     service.affixUser(user);
+
+    // Create a Post
+    String post = "{\"id\":101, \"userId\":1, \"title\":\"My First Blog Post\", \"body\":\"Just working with Retrofit for Android\"}";
+    service.affixPost(post);
+
+    // Get Posts for a User
+    service.fetchPosts(3);
+
+    //Get Comments for a Post
+    service.fetchComments(7);
   }
 
   interface Api {
