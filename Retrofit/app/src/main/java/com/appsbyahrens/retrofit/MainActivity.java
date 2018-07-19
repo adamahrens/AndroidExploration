@@ -56,6 +56,13 @@ public class MainActivity extends AppCompatActivity {
     // Fetch Users
     PlaceholderService service = new PlaceholderService();
     service.fetchUsers();
+
+    // Fetch a Todo
+    service.fetchTodo(2);
+
+    // Create a User
+    String user = "{\"id\":\"101\", \"name\":\"Leroy Jenkins\"}";
+    service.affixUser(user);
   }
 
   interface Api {
