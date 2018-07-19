@@ -23,10 +23,9 @@ public class MainActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
 
+    // For Fetching IP Address
     Retrofit retrofit = new Retrofit.Builder().baseUrl("https://api.ipify.org/").build();
-
     Api api = retrofit.create(Api.class);
-
     api.getMyIp("json").enqueue(new Callback<ResponseBody>() {
       @Override
       public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -52,6 +51,11 @@ public class MainActivity extends AppCompatActivity {
         Log.d(LOG_TAG, "Got failure: " + t.getMessage());
       }
     });
+
+
+    // Fetch Users
+    PlaceholderService service = new PlaceholderService();
+    service.fetchUsers();
   }
 
   interface Api {
